@@ -52,7 +52,7 @@ public class FinnhubServiceImpl implements FinnhubService {
     String urlString = UriCompBuilder.url(Scheme.HTTPS, domain, basepath, profileEndpoint, symbol, key);
 
     Profile2 profile = restTemplate.getForObject(urlString, Profile2.class);
-
+    System.out.println(profile.toString());
     if (profile.getName() == null) 
       throw new InvalidStockSymbolException(Syscode.INVALID_STOCK_SYMBOL);
     

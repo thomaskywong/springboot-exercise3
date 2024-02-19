@@ -2,6 +2,7 @@ package com.vtxlab.bootcamp.bcstockfinnhub;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import java.time.LocalDate;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -10,6 +11,7 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.client.RestTemplate;
+import com.vtxlab.bootcamp.bcstockfinnhub.dto.jph.Profile2;
 import com.vtxlab.bootcamp.bcstockfinnhub.dto.jph.Quote;
 import com.vtxlab.bootcamp.bcstockfinnhub.exception.InvalidStockSymbolException;
 import com.vtxlab.bootcamp.bcstockfinnhub.infra.Scheme;
@@ -61,7 +63,7 @@ public class FinnhubServiceImplTest {
 
     Mockito.when(restTemplate.getForObject(urlString, Quote.class))
         .thenReturn(expected);
-    
+
     Quote actual = finnhubServiceImpl.getQuote(symbol);
 
     assertEquals(expected, actual);
@@ -90,9 +92,74 @@ public class FinnhubServiceImplTest {
     Mockito.when(restTemplate.getForObject(urlString, Quote.class))
         .thenReturn(expected);
 
-    assertThrows(InvalidStockSymbolException.class, () -> finnhubServiceImpl.getQuote(symbol));
+    assertThrows(InvalidStockSymbolException.class,
+        () -> finnhubServiceImpl.getQuote(symbol));
 
   }
+
+  @Test
+  void testGetProfile() {
+
+    Profile2 expected = Profile2.builder() //
+        .country("US") //
+        .currency("USD") //
+        .estimateCurrency("USD") //
+        .exchange("NASDAQ NMS - GLOBAL MARKET") //
+        .finnhubIndustry("Technology") //
+        .ipo(LocalDate.parse("1980-12-12")) //
+        .logo(
+            "https://static2.finnhub.io/file/publicdatany/finnhubimage/stock_logo/AAPL.svg") //
+        .marketCapitalization(14089961010L) //
+        .name("Apple Inc") //
+        .phone("14089961010") //
+        .shareOutstanding(15441.88) //
+        .ticker("AAPL") //
+        .weburl("https://www.apple.com/") //
+        .build();
+    String symbol = "AAPL";
+
+    String urlString = UriCompBuilder.url(Scheme.HTTPS, domain, basepath,
+        profileEndpoint, symbol, key);
+
+    Mockito.when(restTemplate.getForObject(urlString, Profile2.class))
+        .thenReturn(expected);
+
+    Profile2 actual = finnhubServiceImpl.getStockProfile2(symbol);
+
+    assertEquals(expected, actual);
+
+  }
+
+  @Test
+  void testGetProfileInvalidSymbol() {
+
+    Profile2 profile = Profile2.builder() //
+        .country(null) //
+        .currency(null) //
+        .estimateCurrency(null) //
+        .finnhubIndustry(null) //
+        .ipo(null) //
+        .marketCapitalization(0.0) //
+        .name(null) //
+        .phone(null) //
+        .shareOutstanding(0.0) //
+        .ticker(null) //
+        .weburl(null) //
+        .build();
+
+    String symbol = "ZZ";
+
+    String urlString = UriCompBuilder.url(Scheme.HTTPS, domain, basepath,
+        quoteEndpoint, symbol, key);
+
+    Mockito.when(restTemplate.getForObject(urlString, Profile2.class))
+        .thenReturn(profile);
+
+    assertThrows(InvalidStockSymbolException.class,
+        () -> finnhubServiceImpl.getStockProfile2(symbol));
+
+  }
+
 
 
 }
