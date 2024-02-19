@@ -14,9 +14,9 @@ public class Quote {
   // Current Price
   private double c;
   // Change
-  private double d;
+  private Double d;
   // Percent change
-  private double dp;
+  private Double dp;
   // High price of the day
   private double h;
   // Low price of the day
