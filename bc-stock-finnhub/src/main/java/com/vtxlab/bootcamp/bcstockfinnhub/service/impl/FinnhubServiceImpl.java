@@ -11,7 +11,9 @@ import com.vtxlab.bootcamp.bcstockfinnhub.infra.Scheme;
 import com.vtxlab.bootcamp.bcstockfinnhub.infra.Syscode;
 import com.vtxlab.bootcamp.bcstockfinnhub.infra.UriCompBuilder;
 import com.vtxlab.bootcamp.bcstockfinnhub.service.FinnhubService;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Service
 public class FinnhubServiceImpl implements FinnhubService {
 
@@ -32,33 +34,36 @@ public class FinnhubServiceImpl implements FinnhubService {
 
   @Autowired
   private RestTemplate restTemplate;
-  
+
   @Override
   public Quote getQuote(String symbol) {
 
-    String urlString = UriCompBuilder.url(Scheme.HTTPS, domain, basepath, quoteEndpoint, symbol, key);
-
+    String urlString = UriCompBuilder.url(Scheme.HTTPS, domain, basepath,
+        quoteEndpoint, symbol, key);
+    // log.info("urlString "+urlString);
     Quote quote = restTemplate.getForObject(urlString, Quote.class);
-
-    if (quote.getT() == 0) 
+    // log.info("Quote " + quote);
+    if (quote.getT() == 0) {
       throw new InvalidStockSymbolException(Syscode.INVALID_STOCK_SYMBOL);
-    
+    }
+    // HttpMessageConversionException
     return quote;
   }
 
   @Override
   public Profile2 getStockProfile2(String symbol) {
 
-    String urlString = UriCompBuilder.url(Scheme.HTTPS, domain, basepath, profileEndpoint, symbol, key);
+    String urlString = UriCompBuilder.url(Scheme.HTTPS, domain, basepath,
+        profileEndpoint, symbol, key);
 
     Profile2 profile = restTemplate.getForObject(urlString, Profile2.class);
     System.out.println(profile.toString());
-    if (profile.getName() == null) 
+    if (profile.getName() == null)
       throw new InvalidStockSymbolException(Syscode.INVALID_STOCK_SYMBOL);
-    
+
     return profile;
 
 
   }
-  
+
 }

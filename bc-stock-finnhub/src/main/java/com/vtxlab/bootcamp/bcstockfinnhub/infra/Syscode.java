@@ -10,7 +10,8 @@ public enum Syscode {
   INVALID_CURRENCY("200001","Invalid Currency."), //
   INVALID_COIN("200002","Invalid Coin Id."), //
   INVALID_STOCK_SYMBOL("200003","Invalid Stock Symbol."), //
-  REST_CLIENT_EXEPTION("900001", "RestClient Exception."), //
+  REST_CLIENT_EXCEPTION("900001", "RestClient Exception."), //
+  JSON_PROCESSING_EXCEPTION("900002", "Json Procesing Exception."), //
   NPE_EXCEPTION("900000","Runtime Exception - NPE"), //
   GENERAL_EXCEPTION("999999","Exception"), //
   ;

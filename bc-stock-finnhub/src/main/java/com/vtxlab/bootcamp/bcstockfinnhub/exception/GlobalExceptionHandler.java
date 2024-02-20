@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.client.RestClientException;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.vtxlab.bootcamp.bcstockfinnhub.infra.ApiResponse;
 import com.vtxlab.bootcamp.bcstockfinnhub.infra.Syscode;
 
@@ -43,15 +44,25 @@ public class GlobalExceptionHandler {
         .build();
   }
 
-  @ExceptionHandler(Exception.class)
+  @ExceptionHandler(JsonProcessingException.class)
   @ResponseStatus(value = HttpStatus.REQUEST_TIMEOUT)
-  public ApiResponse<Void> ExceptionHandler(Exception ex) {
+  public ApiResponse<Void> JsonProcessingExceptionHandler(JsonProcessingException ex) {
     return ApiResponse.<Void>builder() //
-        .code(Syscode.GENERAL_EXCEPTION.getCode()) //
-        .message(Syscode.GENERAL_EXCEPTION.getMessage()) //
+        .code(Syscode.JSON_PROCESSING_EXCEPTION.getCode()) //
+        .message(Syscode.JSON_PROCESSING_EXCEPTION.getMessage()) //
         .data(null) //
         .build();
   }
+
+  // @ExceptionHandler(Exception.class)
+  // @ResponseStatus(value = HttpStatus.REQUEST_TIMEOUT)
+  // public ApiResponse<Void> ExceptionHandler(Exception ex) {
+  //   return ApiResponse.<Void>builder() //
+  //       .code(Syscode.GENERAL_EXCEPTION.getCode()) //
+  //       .message(Syscode.GENERAL_EXCEPTION.getMessage()) //
+  //       .data(null) //
+  //       .build();
+  // }
 
 
 }
