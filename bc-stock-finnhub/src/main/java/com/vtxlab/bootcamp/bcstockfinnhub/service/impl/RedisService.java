@@ -1,6 +1,5 @@
 package com.vtxlab.bootcamp.bcstockfinnhub.service.impl;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
@@ -9,7 +8,7 @@ public class RedisService {
   
   private final RedisTemplate<String, String> redisTemplate;
 
-  @Autowired
+  // @Autowired
   public RedisService(RedisTemplate<String, String> redisTemplate) {
     this.redisTemplate = redisTemplate;
   }
