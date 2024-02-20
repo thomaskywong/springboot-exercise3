@@ -16,7 +16,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import com.vtxlab.bootcamp.bcstockfinnhub.controller.impl.FinnhubController;
 import com.vtxlab.bootcamp.bcstockfinnhub.dto.jph.Profile2;
 import com.vtxlab.bootcamp.bcstockfinnhub.dto.jph.Quote;
-import com.vtxlab.bootcamp.bcstockfinnhub.infra.ApiResponse;
+import com.vtxlab.bootcamp.bcstockfinnhub.exception.InvalidStockSymbolException;
 import com.vtxlab.bootcamp.bcstockfinnhub.infra.Syscode;
 import com.vtxlab.bootcamp.bcstockfinnhub.service.FinnhubService;
 
@@ -43,12 +43,6 @@ public class FinnhubControllerTest {
         .t(1708117200) //
         .build();
 
-    ApiResponse<Quote> expected = ApiResponse.<Quote>builder() //
-        .code(Syscode.OK.getCode()) //
-        .message(Syscode.OK.getMessage()) //
-        .data(quo) //
-        .build();
-
     String symbol = "AAPL";
 
     Mockito.when(finnhubService.getQuote(symbol)).thenReturn(quo);
@@ -65,6 +59,24 @@ public class FinnhubControllerTest {
         .andExpect(jsonPath("$.data.l").value(181.665)) //
         .andExpect(jsonPath("$.data.pc").value(183.86)) //
         .andExpect(jsonPath("$.data.t").value(1708117200)) //
+        .andDo(print());
+
+  }
+
+  @Test
+  void testGetQuoteInvalidSymbol() throws Exception {
+
+    String symbol = "ZZ";
+
+    Mockito.when(finnhubService.getQuote(symbol)).thenThrow(InvalidStockSymbolException.class);
+
+    mockMvc.perform(get("/stock/finnhub/api/v1/quote") //
+        .param("symbol", "ZZ")) //
+        .andExpect(status().isBadRequest()) //
+        .andExpect(content().contentType(MediaType.APPLICATION_JSON)) //
+        .andExpect(jsonPath("$.code").value(Syscode.INVALID_STOCK_SYMBOL.getCode())) //
+        .andExpect(jsonPath("$.message").value(Syscode.INVALID_STOCK_SYMBOL.getMessage())) //
+        .andExpect(jsonPath("$.data").isEmpty()) //
         .andDo(print());
 
   }
@@ -87,12 +99,6 @@ public class FinnhubControllerTest {
         .shareOutstanding(15441.88) //
         .ticker("AAPL") //
         .weburl("https://www.apple.com/") //
-        .build();
-
-    ApiResponse<Profile2> expected = ApiResponse.<Profile2>builder() //
-        .code(Syscode.OK.getCode()) //
-        .message(Syscode.OK.getMessage()) //
-        .data(profile) //
         .build();
 
     String symbol = "AAPL";
@@ -121,5 +127,22 @@ public class FinnhubControllerTest {
 
   }
 
+  @Test
+  void testGetStockProfileInvalidSymbol() throws Exception {
+
+    String symbol = "ZZ";
+
+    Mockito.when(finnhubService.getStockProfile2(symbol)).thenThrow(InvalidStockSymbolException.class);
+
+    mockMvc.perform(get("/stock/finnhub/api/v1/profile2") //
+        .param("symbol", "ZZ")) //
+        .andExpect(status().isBadRequest()) //
+        .andExpect(content().contentType(MediaType.APPLICATION_JSON)) //
+        .andExpect(jsonPath("$.code").value(Syscode.INVALID_STOCK_SYMBOL.getCode())) //
+        .andExpect(jsonPath("$.message").value(Syscode.INVALID_STOCK_SYMBOL.getMessage())) //
+        .andExpect(jsonPath("$.data").isEmpty()) //
+        .andDo(print());
+
+  }
 
 }
