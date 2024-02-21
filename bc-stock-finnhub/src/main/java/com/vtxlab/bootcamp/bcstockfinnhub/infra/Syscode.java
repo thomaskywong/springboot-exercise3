@@ -10,9 +10,10 @@ public enum Syscode {
   INVALID_CURRENCY("200001","Invalid Currency."), //
   INVALID_COIN("200002","Invalid Coin Id."), //
   INVALID_STOCK_SYMBOL("200003","Invalid Stock Symbol."), //
+  FINNHUB_NOT_AVAILABLE_EXCEPTION("900000", "RestClientException - Finnhub Service is unavailable"), //
   REST_CLIENT_EXCEPTION("900001", "RestClient Exception."), //
   JSON_PROCESSING_EXCEPTION("900002", "Json Procesing Exception."), //
-  NPE_EXCEPTION("900000","Runtime Exception - NPE"), //
+  NPE_EXCEPTION("910000","Runtime Exception - NPE"), //
   GENERAL_EXCEPTION("999999","Exception"), //
   ;
 

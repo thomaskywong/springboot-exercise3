@@ -84,13 +84,10 @@ public class FinnhubServiceImplTest {
         .t(0) //
         .build();
 
-    String symbol = "ZZ";
+    String symbol = "ZZZZ";
 
     String urlString = UriCompBuilder.url(Scheme.HTTPS, domain, basepath,
         quoteEndpoint, symbol, key);
-
-    Mockito.when(restTemplate.getForObject(urlString, Quote.class))
-        .thenReturn(expected);
 
     assertThrows(InvalidStockSymbolException.class,
         () -> finnhubServiceImpl.getQuote(symbol));
@@ -147,13 +144,10 @@ public class FinnhubServiceImplTest {
         .weburl(null) //
         .build();
 
-    String symbol = "ZZ";
+    String symbol = "ZZZZ";
 
     String urlString = UriCompBuilder.url(Scheme.HTTPS, domain, basepath,
         quoteEndpoint, symbol, key);
-
-    Mockito.when(restTemplate.getForObject(urlString, Profile2.class))
-        .thenReturn(profile);
 
     assertThrows(InvalidStockSymbolException.class,
         () -> finnhubServiceImpl.getStockProfile2(symbol));

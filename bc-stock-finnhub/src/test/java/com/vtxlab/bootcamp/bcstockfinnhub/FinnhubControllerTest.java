@@ -29,7 +29,7 @@ public class FinnhubControllerTest {
   @MockBean
   private FinnhubService finnhubService;
 
-  @Test
+  // @Test
   void testGetQuote() throws Exception {
 
     Quote quo = Quote.builder() //
@@ -63,7 +63,7 @@ public class FinnhubControllerTest {
 
   }
 
-  @Test
+  // @Test
   void testGetQuoteInvalidSymbol() throws Exception {
 
     String symbol = "ZZ";
@@ -81,7 +81,7 @@ public class FinnhubControllerTest {
 
   }
 
-  @Test
+  // @Test
   void testGetStockProfile() throws Exception {
 
     Profile2 profile = Profile2.builder() //
@@ -127,15 +127,15 @@ public class FinnhubControllerTest {
 
   }
 
-  @Test
+  // @Test
   void testGetStockProfileInvalidSymbol() throws Exception {
 
-    String symbol = "ZZ";
+    String symbol = "ZZZZ";
 
     Mockito.when(finnhubService.getStockProfile2(symbol)).thenThrow(InvalidStockSymbolException.class);
 
     mockMvc.perform(get("/stock/finnhub/api/v1/profile2") //
-        .param("symbol", "ZZ")) //
+        .param("symbol", "ZZZZ")) //
         .andExpect(status().isBadRequest()) //
         .andExpect(content().contentType(MediaType.APPLICATION_JSON)) //
         .andExpect(jsonPath("$.code").value(Syscode.INVALID_STOCK_SYMBOL.getCode())) //

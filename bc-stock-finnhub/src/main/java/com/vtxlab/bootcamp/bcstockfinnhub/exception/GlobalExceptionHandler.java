@@ -54,15 +54,15 @@ public class GlobalExceptionHandler {
         .build();
   }
 
-  // @ExceptionHandler(Exception.class)
-  // @ResponseStatus(value = HttpStatus.REQUEST_TIMEOUT)
-  // public ApiResponse<Void> ExceptionHandler(Exception ex) {
-  //   return ApiResponse.<Void>builder() //
-  //       .code(Syscode.GENERAL_EXCEPTION.getCode()) //
-  //       .message(Syscode.GENERAL_EXCEPTION.getMessage()) //
-  //       .data(null) //
-  //       .build();
-  // }
+  @ExceptionHandler(Exception.class)
+  @ResponseStatus(value = HttpStatus.REQUEST_TIMEOUT)
+  public ApiResponse<Void> ExceptionHandler(Exception ex) {
+    return ApiResponse.<Void>builder() //
+        .code(Syscode.GENERAL_EXCEPTION.getCode()) //
+        .message(Syscode.GENERAL_EXCEPTION.getMessage()) //
+        .data(null) //
+        .build();
+  }
 
 
 }

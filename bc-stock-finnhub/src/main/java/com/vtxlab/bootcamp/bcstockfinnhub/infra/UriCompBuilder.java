@@ -16,4 +16,16 @@ public class UriCompBuilder {
         .toUriString();
   }
 
+  public static String url(Scheme scheme, String domain, String basepath,
+      String endpoint, String key) {
+    return UriComponentsBuilder.newInstance() //
+        .scheme(scheme.name().toLowerCase()) //
+        .host(domain) //
+        .path(basepath) //
+        .path(endpoint) //
+        .queryParam("exchange", "US") //
+        .queryParam("token", key) //
+        .toUriString();
+  }
+
 }
