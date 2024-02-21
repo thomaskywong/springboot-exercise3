@@ -13,26 +13,37 @@ import com.vtxlab.bootcamp.bcstockfinnhub.infra.Syscode;
 public class GlobalExceptionHandler {
 
   @ExceptionHandler(InvalidStockSymbolException.class)
-  @ResponseStatus(value = HttpStatus.BAD_REQUEST)
+  @ResponseStatus(value = HttpStatus.SERVICE_UNAVAILABLE)
   public ApiResponse<Void> InvalidStockSymbolExceptionHandler(
       InvalidStockSymbolException ex) {
     return ApiResponse.<Void>builder() //
-        .code(Syscode.INVALID_STOCK_SYMBOL.getCode()) //
-        .message(Syscode.INVALID_STOCK_SYMBOL.getMessage()) //
+        .code(Syscode.FINNHUB_NOT_AVAILABLE_EXCEPTION.getCode()) //
+        .message(Syscode.FINNHUB_NOT_AVAILABLE_EXCEPTION.getMessage()) //
         .data(null) //
         .build();
   }
 
-  // @ExceptionHandler(InvalidCurrencyException.class)
-  // @ResponseStatus(value = HttpStatus.BAD_REQUEST)
-  // public ApiResponse<Void> InvalidCurrencyExceptionHandler(
-  //     InvalidCurrencyException ex) {
-  //   return ApiResponse.<Void>builder() //
-  //       .code(Syscode.INVALID_CURRENCY.getCode()) //
-  //       .message(Syscode.INVALID_CURRENCY.getMessage()) //
-  //       .data(null) //
-  //       .build();
-  // }
+  @ExceptionHandler(InvalidCurrencyException.class)
+  @ResponseStatus(value = HttpStatus.BAD_REQUEST)
+  public ApiResponse<Void> InvalidCurrencyExceptionHandler(
+      InvalidCurrencyException ex) {
+    return ApiResponse.<Void>builder() //
+        .code(Syscode.INVALID_CURRENCY.getCode()) //
+        .message(Syscode.INVALID_CURRENCY.getMessage()) //
+        .data(null) //
+        .build();
+  }
+
+  @ExceptionHandler(FinnhubNotAvailableException.class)
+  @ResponseStatus(value = HttpStatus.SERVICE_UNAVAILABLE)
+  public ApiResponse<Void> FinnhubNotAvailableExceptionHandler(
+      FinnhubNotAvailableException ex) {
+    return ApiResponse.<Void>builder() //
+        .code(Syscode.FINNHUB_NOT_AVAILABLE_EXCEPTION.getCode()) //
+        .message(Syscode.FINNHUB_NOT_AVAILABLE_EXCEPTION.getMessage()) //
+        .data(null) //
+        .build();
+  }
 
   @ExceptionHandler(RestClientException.class)
   @ResponseStatus(value = HttpStatus.REQUEST_TIMEOUT)
@@ -46,7 +57,8 @@ public class GlobalExceptionHandler {
 
   @ExceptionHandler(JsonProcessingException.class)
   @ResponseStatus(value = HttpStatus.REQUEST_TIMEOUT)
-  public ApiResponse<Void> JsonProcessingExceptionHandler(JsonProcessingException ex) {
+  public ApiResponse<Void> JsonProcessingExceptionHandler(
+      JsonProcessingException ex) {
     return ApiResponse.<Void>builder() //
         .code(Syscode.JSON_PROCESSING_EXCEPTION.getCode()) //
         .message(Syscode.JSON_PROCESSING_EXCEPTION.getMessage()) //

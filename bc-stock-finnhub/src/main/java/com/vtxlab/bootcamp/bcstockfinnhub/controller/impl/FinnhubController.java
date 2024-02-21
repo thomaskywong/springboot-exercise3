@@ -48,7 +48,7 @@ public class FinnhubController implements FinnhubOperation {
     // }
 
     if (!(Symbol.isValidSymbol(symbol))) {
-    throw new InvalidStockSymbolException(Syscode.INVALID_STOCK_SYMBOL);
+      throw new FinnhubNotAvailableException(Syscode.FINNHUB_NOT_AVAILABLE_EXCEPTION);
     }
 
     Duration duration =
@@ -56,7 +56,7 @@ public class FinnhubController implements FinnhubOperation {
     System.out.println("Delay time= " + duration.getSeconds());
 
     if (duration.getSeconds() > 60) {
-      throw new FinnhubNotAvailableException(Syscode.JPH_NOT_AVAILABLE);
+      throw new FinnhubNotAvailableException(Syscode.FINNHUB_NOT_AVAILABLE_EXCEPTION);
     }
 
     String key =
@@ -82,13 +82,12 @@ public class FinnhubController implements FinnhubOperation {
     // }
 
     if (!(Symbol.isValidSymbol(symbol))) {
-    throw new InvalidStockSymbolException(Syscode.INVALID_STOCK_SYMBOL);
+      throw new FinnhubNotAvailableException(Syscode.FINNHUB_NOT_AVAILABLE_EXCEPTION);
     }
 
     Duration duration =
         Duration.between(scheduleConfig.getFinnhubUpdatedTime(), LocalDateTime.now());
     System.out.println("Delay time= " + duration.getSeconds());
-
 
     if (duration.getSeconds() > 60) {
       throw new FinnhubNotAvailableException(Syscode.FINNHUB_NOT_AVAILABLE_EXCEPTION);

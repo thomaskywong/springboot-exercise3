@@ -2,6 +2,8 @@ package com.vtxlab.bootcamp.bcstockfinnhub.service.impl;
 
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
+import com.vtxlab.bootcamp.bcstockfinnhub.exception.FinnhubNotAvailableException;
+import com.vtxlab.bootcamp.bcstockfinnhub.infra.Syscode;
 
 @Service
 public class RedisService {
@@ -18,7 +20,11 @@ public class RedisService {
   }
 
   public String getValue(String key) {
-    return redisTemplate.opsForValue().get(key);
+    String value = redisTemplate.opsForValue().get(key);
+    if (value == null) {
+      throw new FinnhubNotAvailableException(Syscode.FINNHUB_NOT_AVAILABLE_EXCEPTION);
+    }
+    return value;
   }
   
   

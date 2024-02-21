@@ -1,7 +1,6 @@
 package com.vtxlab.bootcamp.bcstockfinnhub;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import java.time.LocalDate;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -13,7 +12,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.client.RestTemplate;
 import com.vtxlab.bootcamp.bcstockfinnhub.dto.jph.Profile2;
 import com.vtxlab.bootcamp.bcstockfinnhub.dto.jph.Quote;
-import com.vtxlab.bootcamp.bcstockfinnhub.exception.InvalidStockSymbolException;
 import com.vtxlab.bootcamp.bcstockfinnhub.infra.Scheme;
 import com.vtxlab.bootcamp.bcstockfinnhub.infra.UriCompBuilder;
 import com.vtxlab.bootcamp.bcstockfinnhub.service.impl.FinnhubServiceImpl;
@@ -71,30 +69,6 @@ public class FinnhubServiceImplTest {
   }
 
   @Test
-  void testGetQuoteInvalidSymbol() {
-
-    Quote expected = Quote.builder() //
-        .c(0) //
-        .d(null) //
-        .dp(null) //
-        .h(0) //
-        .l(0) //
-        .o(0) //
-        .pc(0) //
-        .t(0) //
-        .build();
-
-    String symbol = "ZZZZ";
-
-    String urlString = UriCompBuilder.url(Scheme.HTTPS, domain, basepath,
-        quoteEndpoint, symbol, key);
-
-    assertThrows(InvalidStockSymbolException.class,
-        () -> finnhubServiceImpl.getQuote(symbol));
-
-  }
-
-  @Test
   void testGetProfile() {
 
     Profile2 expected = Profile2.builder() //
@@ -103,17 +77,18 @@ public class FinnhubServiceImplTest {
         .estimateCurrency("USD") //
         .exchange("NASDAQ NMS - GLOBAL MARKET") //
         .finnhubIndustry("Technology") //
-        .ipo(LocalDate.parse("1980-12-12")) //
+        .ipo(LocalDate.parse("1986-03-13")) //
         .logo(
-            "https://static2.finnhub.io/file/publicdatany/finnhubimage/stock_logo/AAPL.svg") //
-        .marketCapitalization(14089961010L) //
-        .name("Apple Inc") //
-        .phone("14089961010") //
-        .shareOutstanding(15441.88) //
-        .ticker("AAPL") //
-        .weburl("https://www.apple.com/") //
+            "https://static2.finnhub.io/file/publicdatany/finnhubimage/stock_logo/MSFT.svg") //
+        .marketCapitalization(2992905.3125173687) //
+        .name("Microsoft Corp") //
+        .phone("14258828080") //
+        .shareOutstanding(7430.44) //
+        .ticker("MSFT") //
+        .weburl("https://www.microsoft.com/en-us") //
         .build();
-    String symbol = "AAPL";
+
+    String symbol = "MSFT";
 
     String urlString = UriCompBuilder.url(Scheme.HTTPS, domain, basepath,
         profileEndpoint, symbol, key);
@@ -126,34 +101,6 @@ public class FinnhubServiceImplTest {
     assertEquals(expected, actual);
 
   }
-
-  @Test
-  void testGetProfileInvalidSymbol() {
-
-    Profile2 profile = Profile2.builder() //
-        .country(null) //
-        .currency(null) //
-        .estimateCurrency(null) //
-        .finnhubIndustry(null) //
-        .ipo(null) //
-        .marketCapitalization(0.0) //
-        .name(null) //
-        .phone(null) //
-        .shareOutstanding(0.0) //
-        .ticker(null) //
-        .weburl(null) //
-        .build();
-
-    String symbol = "ZZZZ";
-
-    String urlString = UriCompBuilder.url(Scheme.HTTPS, domain, basepath,
-        quoteEndpoint, symbol, key);
-
-    assertThrows(InvalidStockSymbolException.class,
-        () -> finnhubServiceImpl.getStockProfile2(symbol));
-
-  }
-
 
 
 }

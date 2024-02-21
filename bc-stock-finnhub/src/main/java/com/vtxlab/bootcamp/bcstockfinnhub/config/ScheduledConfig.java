@@ -1,6 +1,8 @@
 package com.vtxlab.bootcamp.bcstockfinnhub.config;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.Month;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -20,7 +22,7 @@ import lombok.Getter;
 @EnableScheduling
 public class ScheduledConfig {
 
-  private LocalDateTime finnhubUpdatedTime;
+  private LocalDateTime finnhubUpdatedTime = LocalDateTime.MIN;
 
   @Autowired
   private RedisService redisService;
@@ -31,7 +33,6 @@ public class ScheduledConfig {
   @Autowired
   private ObjectMapper objectMapper;
 
-  // Run every 60s
   @Scheduled(fixedRate = 30000)
   public void fixedRateTask() {
 
