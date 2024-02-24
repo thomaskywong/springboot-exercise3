@@ -3,12 +3,11 @@ package com.vtxlab.bootcamp.bcstockfinnhub;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import java.time.LocalDate;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.web.client.RestTemplate;
 import com.vtxlab.bootcamp.bcstockfinnhub.dto.jph.Profile2;
 import com.vtxlab.bootcamp.bcstockfinnhub.dto.jph.Quote;
@@ -16,7 +15,7 @@ import com.vtxlab.bootcamp.bcstockfinnhub.infra.Scheme;
 import com.vtxlab.bootcamp.bcstockfinnhub.infra.UriCompBuilder;
 import com.vtxlab.bootcamp.bcstockfinnhub.service.impl.FinnhubServiceImpl;
 
-@ExtendWith(MockitoExtension.class)
+@SpringBootTest
 public class FinnhubServiceImplTest {
 
   @Value(value = "${api.jph.domain}")
@@ -34,10 +33,10 @@ public class FinnhubServiceImplTest {
   @Value(value = "${api.jph.key}")
   private String key;
 
-  @InjectMocks
+  @Autowired
   private FinnhubServiceImpl finnhubServiceImpl;
 
-  @Mock
+  @MockBean
   private RestTemplate restTemplate;
 
   @Test

@@ -7,11 +7,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.vtxlab.bootcamp.bcstockfinnhub.dto.jph.Profile2;
 import com.vtxlab.bootcamp.bcstockfinnhub.dto.jph.Quote;
 import com.vtxlab.bootcamp.bcstockfinnhub.dto.jph.Symbol;
 import com.vtxlab.bootcamp.bcstockfinnhub.infra.Scheme;
 import com.vtxlab.bootcamp.bcstockfinnhub.infra.UriCompBuilder;
+import com.vtxlab.bootcamp.bcstockfinnhub.model.StockSymbol;
 import com.vtxlab.bootcamp.bcstockfinnhub.service.FinnhubService;
 
 @Service
@@ -37,6 +40,12 @@ public class FinnhubServiceImpl implements FinnhubService {
 
   @Autowired
   private RestTemplate restTemplate;
+
+  @Autowired
+  private RedisService redisService;
+
+  @Autowired
+  private ObjectMapper objectMapper;
 
   @Override
   public Quote getQuote(String symbol) {
@@ -70,6 +79,36 @@ public class FinnhubServiceImpl implements FinnhubService {
 
     Symbol[] symbols = restTemplate.getForObject(urlString, Symbol[].class);
     return Arrays.stream(symbols).collect(Collectors.toList());
+
+  }
+
+  @Override
+  public void saveStockToRedis() throws JsonProcessingException{
+
+    String quoteKey = "";
+    String profileKey = "";
+    String symbol = "";
+    Quote quote;
+    Profile2 profile;
+    String quoteSerialized;
+    String profileSerialized;
+
+    for (StockSymbol symbolEnum : StockSymbol.values()) {
+      symbol = symbolEnum.name();
+
+      quote = this.getQuote(symbol);
+      quoteKey =
+          new StringBuilder("stock:finnhub:quote:").append(symbol).toString();
+      quoteSerialized = objectMapper.writeValueAsString(quote);
+      redisService.setValue(quoteKey, quoteSerialized);
+
+      profile = this.getStockProfile2(symbol);
+      profileKey = new StringBuilder("stock:finnhub:profile2:").append(symbol)
+          .toString();
+      profileSerialized = objectMapper.writeValueAsString(profile);
+      redisService.setValue(profileKey, profileSerialized);
+
+    }
 
   }
 

@@ -36,34 +36,12 @@ public class ScheduledConfig {
   @Scheduled(fixedRate = 30000)
   public void fixedRateTask() {
 
-    String quoteKey = "";
-    String profileKey = "";
-    String symbol = "";
-    Quote quote;
-    Profile2 profile;
-    String quoteSerialized;
-    String profileSerialized;
-
-
     try {
-      for (StockSymbol symbolEnum : StockSymbol.values()) {
-        symbol = symbolEnum.name();
-        // System.out.println("symbol= " + symbol);
 
-        quote = finnhubService.getQuote(symbol);
-        quoteKey =
-            new StringBuilder("stock:finnhub:quote:").append(symbol).toString();
-        quoteSerialized = objectMapper.writeValueAsString(quote);
-        redisService.setValue(quoteKey, quoteSerialized);
+      finnhubService.saveStockToRedis();
 
-        profile = finnhubService.getStockProfile2(symbol);
-        profileKey = new StringBuilder("stock:finnhub:profile2:").append(symbol)
-            .toString();
-        profileSerialized = objectMapper.writeValueAsString(profile);
-        redisService.setValue(profileKey, profileSerialized);
-
-      }
       this.finnhubUpdatedTime = LocalDateTime.now();
+      System.out.println("Update time=" + this.finnhubUpdatedTime);
 
     } catch (RestClientException | JsonProcessingException  ex) {
 
