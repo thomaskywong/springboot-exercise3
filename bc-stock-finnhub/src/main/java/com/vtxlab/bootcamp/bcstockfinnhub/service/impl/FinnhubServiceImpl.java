@@ -13,7 +13,8 @@ import com.vtxlab.bootcamp.bcstockfinnhub.dto.jph.Profile2;
 import com.vtxlab.bootcamp.bcstockfinnhub.dto.jph.Quote;
 import com.vtxlab.bootcamp.bcstockfinnhub.dto.jph.Symbol;
 import com.vtxlab.bootcamp.bcstockfinnhub.infra.Scheme;
-import com.vtxlab.bootcamp.bcstockfinnhub.infra.UriCompBuilder;
+import com.vtxlab.bootcamp.bcstockfinnhub.infra.StockMarket;
+import com.vtxlab.bootcamp.bcstockfinnhub.mapper.UriCompBuilder;
 import com.vtxlab.bootcamp.bcstockfinnhub.model.StockSymbol;
 import com.vtxlab.bootcamp.bcstockfinnhub.service.FinnhubService;
 
@@ -75,7 +76,7 @@ public class FinnhubServiceImpl implements FinnhubService {
   @Override
   public List<Symbol> getSymbols() {
     String urlString = UriCompBuilder.url(Scheme.HTTPS, domain, basepath,
-        symbolsEndpoint, key);
+        symbolsEndpoint, StockMarket.US, key);
 
     Symbol[] symbols = restTemplate.getForObject(urlString, Symbol[].class);
     return Arrays.stream(symbols).collect(Collectors.toList());

@@ -24,12 +24,23 @@ public class GlobalExceptionHandler {
   }
 
   @ExceptionHandler(InvalidCurrencyException.class)
-  @ResponseStatus(value = HttpStatus.BAD_REQUEST)
+  @ResponseStatus(value = HttpStatus.SERVICE_UNAVAILABLE)
   public ApiResponse<Void> InvalidCurrencyExceptionHandler(
       InvalidCurrencyException ex) {
     return ApiResponse.<Void>builder() //
         .code(Syscode.INVALID_CURRENCY.getCode()) //
         .message(Syscode.INVALID_CURRENCY.getMessage()) //
+        .data(null) //
+        .build();
+  }
+
+  @ExceptionHandler(EmptyCoinListException.class)
+  @ResponseStatus(value = HttpStatus.SERVICE_UNAVAILABLE)
+  public ApiResponse<Void> EmptyCoinListExceptionHandler(
+      EmptyCoinListException ex) {
+    return ApiResponse.<Void>builder() //
+        .code(Syscode.EMPTY_COIN_LIST.getCode()) //
+        .message(Syscode.EMPTY_COIN_LIST.getMessage()) //
         .data(null) //
         .build();
   }

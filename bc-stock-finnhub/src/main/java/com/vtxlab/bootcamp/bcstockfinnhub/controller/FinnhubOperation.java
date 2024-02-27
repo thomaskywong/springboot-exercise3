@@ -15,15 +15,18 @@ public interface FinnhubOperation {
 
   @GetMapping(value = "/quote")
   @ResponseStatus(value = HttpStatus.OK)
-  ApiResponse<Quote> getQuote(@RequestParam(required = true) String symbol) throws JsonProcessingException;
-  
+  ApiResponse<Quote> getQuote(@RequestParam(required = true) String symbol)
+      throws JsonProcessingException;
+
   @GetMapping(value = "/profile2")
   @ResponseStatus(value = HttpStatus.OK)
-  ApiResponse<Profile2> getStockProfile(@RequestParam(required = true) String symbol) throws JsonProcessingException;
-  
+  ApiResponse<Profile2> getStockProfile(
+      @RequestParam(required = true) String symbol)
+      throws JsonProcessingException;
+
   @GetMapping(value = "/symbols")
   @ResponseStatus(value = HttpStatus.OK)
-  ApiResponse<List<Symbol>> getSymbols() throws JsonProcessingException;
-  
-  
+  List<Symbol> getSymbols() throws JsonProcessingException;
+
+
 }

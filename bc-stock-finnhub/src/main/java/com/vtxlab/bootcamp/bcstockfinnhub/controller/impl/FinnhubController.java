@@ -13,7 +13,6 @@ import com.vtxlab.bootcamp.bcstockfinnhub.controller.FinnhubOperation;
 import com.vtxlab.bootcamp.bcstockfinnhub.dto.jph.Profile2;
 import com.vtxlab.bootcamp.bcstockfinnhub.dto.jph.Quote;
 import com.vtxlab.bootcamp.bcstockfinnhub.dto.jph.Symbol;
-import com.vtxlab.bootcamp.bcstockfinnhub.exception.InvalidStockSymbolException;
 import com.vtxlab.bootcamp.bcstockfinnhub.exception.FinnhubNotAvailableException;
 import com.vtxlab.bootcamp.bcstockfinnhub.infra.ApiResponse;
 import com.vtxlab.bootcamp.bcstockfinnhub.infra.Syscode;
@@ -37,32 +36,46 @@ public class FinnhubController implements FinnhubOperation {
   @Autowired
   private ObjectMapper objectMapper;
 
+  // @Autowired
+  // private StockIdMapper stockIdMapper;
+
   @Override
   public ApiResponse<Quote> getQuote(String symbol)
       throws JsonProcessingException {
 
-    // List<Symbol> symbols = finnhubService.getSymbols();
+    // List<StockId> stockIds = stockIdRepository.findAll() //
+    //     .stream() //
+    //     .map(e -> stockIdMapper.mapSymbolId(e)) //
+    //     .collect(Collectors.toList());
 
-    // if (!(Symbol.isValidSymbol(symbols, symbol))) {
+    // if (stockIds.size() == 0) {
+    //   throw new EmptyCoinListException();
+    // }
+
+    // if (!(StockId.isValidStockId(stockIds, symbol))) {
     //   throw new InvalidStockSymbolException(Syscode.INVALID_STOCK_SYMBOL);
     // }
 
     if (!(Symbol.isValidSymbol(symbol))) {
-      throw new FinnhubNotAvailableException(Syscode.FINNHUB_NOT_AVAILABLE_EXCEPTION);
+      throw new FinnhubNotAvailableException(
+          Syscode.FINNHUB_NOT_AVAILABLE_EXCEPTION);
     }
 
-    Duration duration =
-        Duration.between(scheduleConfig.getFinnhubUpdatedTime(), LocalDateTime.now());
+    Duration duration = Duration.between(scheduleConfig.getFinnhubUpdatedTime(),
+        LocalDateTime.now());
     System.out.println("Delay time= " + duration.getSeconds());
 
     if (duration.getSeconds() > 60) {
-      throw new FinnhubNotAvailableException(Syscode.FINNHUB_NOT_AVAILABLE_EXCEPTION);
+      throw new FinnhubNotAvailableException(
+          Syscode.FINNHUB_NOT_AVAILABLE_EXCEPTION);
     }
 
     String key =
         new StringBuilder("stock:finnhub:quote:").append(symbol).toString();
     String redisQuote = redisService.getValue(key);
-    Quote quote = objectMapper.readValue(redisQuote, Quote.class);
+   Quote quote = objectMapper.readValue(redisQuote, Quote.class);
+
+   
 
     return ApiResponse.<Quote>builder() //
         .code(Syscode.OK.getCode()) //
@@ -78,19 +91,21 @@ public class FinnhubController implements FinnhubOperation {
     // List<Symbol> symbols = finnhubService.getSymbols();
 
     // if (!(Symbol.isValidSymbol(symbols, symbol))) {
-    //   throw new InvalidStockSymbolException(Syscode.INVALID_STOCK_SYMBOL);
+    // throw new InvalidStockSymbolException(Syscode.INVALID_STOCK_SYMBOL);
     // }
 
     if (!(Symbol.isValidSymbol(symbol))) {
-      throw new FinnhubNotAvailableException(Syscode.FINNHUB_NOT_AVAILABLE_EXCEPTION);
+      throw new FinnhubNotAvailableException(
+          Syscode.FINNHUB_NOT_AVAILABLE_EXCEPTION);
     }
 
-    Duration duration =
-        Duration.between(scheduleConfig.getFinnhubUpdatedTime(), LocalDateTime.now());
+    Duration duration = Duration.between(scheduleConfig.getFinnhubUpdatedTime(),
+        LocalDateTime.now());
     System.out.println("Delay time= " + duration.getSeconds());
 
     if (duration.getSeconds() > 60) {
-      throw new FinnhubNotAvailableException(Syscode.FINNHUB_NOT_AVAILABLE_EXCEPTION);
+      throw new FinnhubNotAvailableException(
+          Syscode.FINNHUB_NOT_AVAILABLE_EXCEPTION);
     }
 
     String key =
@@ -107,15 +122,17 @@ public class FinnhubController implements FinnhubOperation {
   }
 
   @Override
-  public ApiResponse<List<Symbol>> getSymbols() throws JsonProcessingException {
+  public List<Symbol> getSymbols() throws JsonProcessingException {
 
-    List<Symbol> symbols = finnhubService.getSymbols();
+    // List<Symbol> symbols = finnhubService.getSymbols();
 
-    return ApiResponse.<List<Symbol>>builder() //
-        .code(Syscode.OK.getCode()) //
-        .message(Syscode.OK.getMessage()) //
-        .data(symbols) //
-        .build();
+    // return ApiResponse.<List<Symbol>>builder() //
+    // .code(Syscode.OK.getCode()) //
+    // .message(Syscode.OK.getMessage()) //
+    // .data(symbols) //
+    // .build();
+    return finnhubService.getSymbols();
+
   }
 
 

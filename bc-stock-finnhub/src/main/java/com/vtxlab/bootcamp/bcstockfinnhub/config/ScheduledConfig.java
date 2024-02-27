@@ -1,8 +1,6 @@
 package com.vtxlab.bootcamp.bcstockfinnhub.config;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.Month;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -10,9 +8,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClientException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.vtxlab.bootcamp.bcstockfinnhub.dto.jph.Profile2;
-import com.vtxlab.bootcamp.bcstockfinnhub.dto.jph.Quote;
-import com.vtxlab.bootcamp.bcstockfinnhub.model.StockSymbol;
 import com.vtxlab.bootcamp.bcstockfinnhub.service.FinnhubService;
 import com.vtxlab.bootcamp.bcstockfinnhub.service.impl.RedisService;
 import lombok.Getter;
@@ -33,7 +28,8 @@ public class ScheduledConfig {
   @Autowired
   private ObjectMapper objectMapper;
 
-  @Scheduled(fixedRate = 30000)
+  // @Scheduled(fixedRate = 30000)
+  @Scheduled(cron = "0 * * * * *") // every xx:xx:00
   public void fixedRateTask() {
 
     try {

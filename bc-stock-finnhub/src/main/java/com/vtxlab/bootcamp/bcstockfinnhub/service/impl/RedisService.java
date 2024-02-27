@@ -1,7 +1,6 @@
 package com.vtxlab.bootcamp.bcstockfinnhub.service.impl;
 
 import java.time.Duration;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import com.vtxlab.bootcamp.bcstockfinnhub.exception.FinnhubNotAvailableException;
@@ -12,7 +11,7 @@ public class RedisService {
   
   private final RedisTemplate<String, String> redisTemplate;
   
-  @Autowired
+  // @Autowired
   public RedisService(RedisTemplate<String, String> redisTemplate) {
     this.redisTemplate = redisTemplate;
   }

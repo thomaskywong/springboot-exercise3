@@ -12,7 +12,7 @@ import org.springframework.web.client.RestTemplate;
 import com.vtxlab.bootcamp.bcstockfinnhub.dto.jph.Profile2;
 import com.vtxlab.bootcamp.bcstockfinnhub.dto.jph.Quote;
 import com.vtxlab.bootcamp.bcstockfinnhub.infra.Scheme;
-import com.vtxlab.bootcamp.bcstockfinnhub.infra.UriCompBuilder;
+import com.vtxlab.bootcamp.bcstockfinnhub.mapper.UriCompBuilder;
 import com.vtxlab.bootcamp.bcstockfinnhub.service.impl.FinnhubServiceImpl;
 
 @SpringBootTest
