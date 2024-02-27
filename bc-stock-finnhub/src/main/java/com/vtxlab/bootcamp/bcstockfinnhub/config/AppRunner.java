@@ -3,10 +3,10 @@ package com.vtxlab.bootcamp.bcstockfinnhub.config;
 import java.time.LocalDateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
-import org.springframework.stereotype.Component;
+import org.springframework.context.annotation.Configuration;
 import com.vtxlab.bootcamp.bcstockfinnhub.service.FinnhubService;
 
-@Component
+@Configuration
 public class AppRunner implements CommandLineRunner{
 
   @Autowired

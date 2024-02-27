@@ -2,9 +2,9 @@ package com.vtxlab.bootcamp.bcstockfinnhub.config;
 
 import java.time.LocalDateTime;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClientException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -13,7 +13,7 @@ import com.vtxlab.bootcamp.bcstockfinnhub.service.impl.RedisService;
 import lombok.Getter;
 
 @Getter
-@Component
+@Configuration
 @EnableScheduling
 public class ScheduledConfig {
 
