@@ -1,4 +1,4 @@
-package com.vtxlab.bootcamp.bcstockfinnhub.dto.jph;
+package com.vtxlab.bootcamp.bcstockfinnhub.dto;
 
 import lombok.Builder;
 import lombok.EqualsAndHashCode;

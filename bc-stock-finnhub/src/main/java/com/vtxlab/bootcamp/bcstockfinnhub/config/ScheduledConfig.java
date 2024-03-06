@@ -9,7 +9,7 @@ import org.springframework.web.client.RestClientException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.vtxlab.bootcamp.bcstockfinnhub.service.FinnhubService;
-import com.vtxlab.bootcamp.bcstockfinnhub.service.impl.RedisService;
+import com.vtxlab.bootcamp.bcstockfinnhub.service.RedisService;
 import lombok.Getter;
 
 @Getter
@@ -28,7 +28,7 @@ public class ScheduledConfig {
   @Autowired
   private ObjectMapper objectMapper;
 
-  @Scheduled(fixedRate = 30000)
+  @Scheduled(fixedRate = 10000)
   // @Scheduled(cron = "0 * * * * *") // every xx:xx:00
   public void fixedRateTask() {
 
@@ -37,7 +37,7 @@ public class ScheduledConfig {
       finnhubService.saveStockToRedis();
 
       this.finnhubUpdatedTime = LocalDateTime.now();
-      System.out.println("Update time=" + this.finnhubUpdatedTime);
+      System.out.println("Redis update time=" + this.finnhubUpdatedTime);
 
     } catch (RestClientException | JsonProcessingException  ex) {
 

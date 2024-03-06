@@ -10,14 +10,15 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.vtxlab.bootcamp.bcstockfinnhub.config.ScheduledConfig;
 import com.vtxlab.bootcamp.bcstockfinnhub.controller.FinnhubOperation;
-import com.vtxlab.bootcamp.bcstockfinnhub.dto.jph.Profile2;
-import com.vtxlab.bootcamp.bcstockfinnhub.dto.jph.Quote;
-import com.vtxlab.bootcamp.bcstockfinnhub.dto.jph.Symbol;
+import com.vtxlab.bootcamp.bcstockfinnhub.dto.Profile2;
+import com.vtxlab.bootcamp.bcstockfinnhub.dto.Quote;
+import com.vtxlab.bootcamp.bcstockfinnhub.dto.Symbol;
 import com.vtxlab.bootcamp.bcstockfinnhub.exception.FinnhubNotAvailableException;
+import com.vtxlab.bootcamp.bcstockfinnhub.exception.InvalidStockSymbolException;
 import com.vtxlab.bootcamp.bcstockfinnhub.infra.ApiResponse;
 import com.vtxlab.bootcamp.bcstockfinnhub.infra.Syscode;
 import com.vtxlab.bootcamp.bcstockfinnhub.service.FinnhubService;
-import com.vtxlab.bootcamp.bcstockfinnhub.service.impl.RedisService;
+import com.vtxlab.bootcamp.bcstockfinnhub.service.RedisService;
 
 
 @RestController
@@ -43,39 +44,30 @@ public class FinnhubController implements FinnhubOperation {
   public ApiResponse<Quote> getQuote(String symbol)
       throws JsonProcessingException {
 
-    // List<StockId> stockIds = stockIdRepository.findAll() //
-    //     .stream() //
-    //     .map(e -> stockIdMapper.mapSymbolId(e)) //
-    //     .collect(Collectors.toList());
-
-    // if (stockIds.size() == 0) {
-    //   throw new EmptyCoinListException();
-    // }
-
-    // if (!(StockId.isValidStockId(stockIds, symbol))) {
-    //   throw new InvalidStockSymbolException(Syscode.INVALID_STOCK_SYMBOL);
-    // }
-
-    if (!(Symbol.isValidSymbol(symbol))) {
-      throw new FinnhubNotAvailableException(
-          Syscode.FINNHUB_NOT_AVAILABLE_EXCEPTION);
-    }
-
-    Duration duration = Duration.between(scheduleConfig.getFinnhubUpdatedTime(),
-        LocalDateTime.now());
-    System.out.println("Delay time= " + duration.getSeconds());
-
-    if (duration.getSeconds() > 60) {
-      throw new FinnhubNotAvailableException(
-          Syscode.FINNHUB_NOT_AVAILABLE_EXCEPTION);
-    }
-
     String key =
         new StringBuilder("stock:finnhub:quote:").append(symbol).toString();
-    String redisQuote = redisService.getValue(key);
-   Quote quote = objectMapper.readValue(redisQuote, Quote.class);
 
-   
+    // System.out.println("key = " + key);
+     
+    String redisQuote = redisService.getValue(key);
+
+    // System.out.println(redisQuote);
+
+    Quote quote;
+    // Quote quote = objectMapper.readValue(redisQuote, Quote.class);
+
+
+    if (redisQuote != null) {
+      quote = objectMapper.readValue(redisQuote, Quote.class);
+    } else {
+      List<Symbol> symbols = this.getSymbols();
+
+      if (!(Symbol.isValidSymbol(symbols, symbol))) {
+        throw new InvalidStockSymbolException(Syscode.INVALID_STOCK_SYMBOL);
+      }
+
+      quote = finnhubService.getQuote(symbol);    
+    }
 
     return ApiResponse.<Quote>builder() //
         .code(Syscode.OK.getCode()) //
@@ -88,22 +80,7 @@ public class FinnhubController implements FinnhubOperation {
   public ApiResponse<Profile2> getStockProfile(String symbol)
       throws JsonProcessingException {
 
-    // List<Symbol> symbols = finnhubService.getSymbols();
-
-    // if (!(Symbol.isValidSymbol(symbols, symbol))) {
-    // throw new InvalidStockSymbolException(Syscode.INVALID_STOCK_SYMBOL);
-    // }
-
     if (!(Symbol.isValidSymbol(symbol))) {
-      throw new FinnhubNotAvailableException(
-          Syscode.FINNHUB_NOT_AVAILABLE_EXCEPTION);
-    }
-
-    Duration duration = Duration.between(scheduleConfig.getFinnhubUpdatedTime(),
-        LocalDateTime.now());
-    System.out.println("Delay time= " + duration.getSeconds());
-
-    if (duration.getSeconds() > 60) {
       throw new FinnhubNotAvailableException(
           Syscode.FINNHUB_NOT_AVAILABLE_EXCEPTION);
     }
@@ -111,7 +88,23 @@ public class FinnhubController implements FinnhubOperation {
     String key =
         new StringBuilder("stock:finnhub:profile2:").append(symbol).toString();
     String redisProfile = redisService.getValue(key);
-    Profile2 profile = objectMapper.readValue(redisProfile, Profile2.class);
+    // Profile2 profile = objectMapper.readValue(redisProfile, Profile2.class);
+
+    Profile2 profile;
+
+    if (redisProfile != null) {
+      profile = objectMapper.readValue(redisProfile, Profile2.class);
+    } else {
+      
+      List<Symbol> symbols = this.getSymbols();
+
+      if (!(Symbol.isValidSymbol(symbols, symbol))) {
+        throw new InvalidStockSymbolException(Syscode.INVALID_STOCK_SYMBOL);
+      }
+
+      profile = finnhubService.getStockProfile2(symbol);
+
+    }
 
     return ApiResponse.<Profile2>builder() //
         .code(Syscode.OK.getCode()) //
@@ -124,13 +117,6 @@ public class FinnhubController implements FinnhubOperation {
   @Override
   public List<Symbol> getSymbols() throws JsonProcessingException {
 
-    // List<Symbol> symbols = finnhubService.getSymbols();
-
-    // return ApiResponse.<List<Symbol>>builder() //
-    // .code(Syscode.OK.getCode()) //
-    // .message(Syscode.OK.getMessage()) //
-    // .data(symbols) //
-    // .build();
     return finnhubService.getSymbols();
 
   }

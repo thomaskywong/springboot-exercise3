@@ -15,7 +15,7 @@ public class AppRunner implements CommandLineRunner{
   @Override
   public void run(String... args) throws Exception {
       finnhubService.saveStockToRedis();
-      System.out.println("Update Time=" + LocalDateTime.now());
+      System.out.println("Redis Update Time=" + LocalDateTime.now());
   }
   
 }

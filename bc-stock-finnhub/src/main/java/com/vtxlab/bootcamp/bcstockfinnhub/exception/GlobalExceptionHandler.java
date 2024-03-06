@@ -17,8 +17,8 @@ public class GlobalExceptionHandler {
   public ApiResponse<Void> InvalidStockSymbolExceptionHandler(
       InvalidStockSymbolException ex) {
     return ApiResponse.<Void>builder() //
-        .code(Syscode.FINNHUB_NOT_AVAILABLE_EXCEPTION.getCode()) //
-        .message(Syscode.FINNHUB_NOT_AVAILABLE_EXCEPTION.getMessage()) //
+        .code(Syscode.INVALID_STOCK_SYMBOL.getCode()) //
+        .message(Syscode.INVALID_STOCK_SYMBOL.getMessage()) //
         .data(null) //
         .build();
   }
@@ -60,8 +60,8 @@ public class GlobalExceptionHandler {
   @ResponseStatus(value = HttpStatus.REQUEST_TIMEOUT)
   public ApiResponse<Void> RestClientExceptionHandler(RestClientException ex) {
     return ApiResponse.<Void>builder() //
-        .code(Syscode.JPH_NOT_AVAILABLE.getCode()) //
-        .message(Syscode.JPH_NOT_AVAILABLE.getMessage()) //
+        .code(Syscode.FINNHUB_NOT_AVAILABLE_EXCEPTION.getCode()) //
+        .message(Syscode.FINNHUB_NOT_AVAILABLE_EXCEPTION.getMessage()) //
         .data(null) //
         .build();
   }

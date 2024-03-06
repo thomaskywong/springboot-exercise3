@@ -9,14 +9,15 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.vtxlab.bootcamp.bcstockfinnhub.dto.jph.Profile2;
-import com.vtxlab.bootcamp.bcstockfinnhub.dto.jph.Quote;
-import com.vtxlab.bootcamp.bcstockfinnhub.dto.jph.Symbol;
+import com.vtxlab.bootcamp.bcstockfinnhub.dto.Profile2;
+import com.vtxlab.bootcamp.bcstockfinnhub.dto.Quote;
+import com.vtxlab.bootcamp.bcstockfinnhub.dto.Symbol;
 import com.vtxlab.bootcamp.bcstockfinnhub.infra.Scheme;
 import com.vtxlab.bootcamp.bcstockfinnhub.infra.StockMarket;
 import com.vtxlab.bootcamp.bcstockfinnhub.mapper.UriCompBuilder;
 import com.vtxlab.bootcamp.bcstockfinnhub.model.StockSymbol;
 import com.vtxlab.bootcamp.bcstockfinnhub.service.FinnhubService;
+import com.vtxlab.bootcamp.bcstockfinnhub.service.RedisService;
 
 @Service
 public class FinnhubServiceImpl implements FinnhubService {

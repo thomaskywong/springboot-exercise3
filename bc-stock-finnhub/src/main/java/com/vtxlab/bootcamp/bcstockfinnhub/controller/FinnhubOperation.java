@@ -6,9 +6,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.vtxlab.bootcamp.bcstockfinnhub.dto.jph.Profile2;
-import com.vtxlab.bootcamp.bcstockfinnhub.dto.jph.Quote;
-import com.vtxlab.bootcamp.bcstockfinnhub.dto.jph.Symbol;
+import com.vtxlab.bootcamp.bcstockfinnhub.dto.Profile2;
+import com.vtxlab.bootcamp.bcstockfinnhub.dto.Quote;
+import com.vtxlab.bootcamp.bcstockfinnhub.dto.Symbol;
 import com.vtxlab.bootcamp.bcstockfinnhub.infra.ApiResponse;
 
 public interface FinnhubOperation {
